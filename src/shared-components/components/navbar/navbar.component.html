@@ -1,15 +1,16 @@
-<p>navbar works!</p>
-<ul>
-    <li *ngFor="let item of navigationItems">
-        <a *ngIf="item.children?.length === 0" [routerLink]="item.link">{{ item.label }}</a>
-        <ng-container *ngIf="item.children && item.children.length > 0">
-            <a>{{ item.label }}</a>
-            <ul>
-                <li *ngFor="let child of item.children">
-                    <a [routerLink]="child.link">{{ child.label }}</a>
-                </li>
-            </ul>
-        </ng-container>
-    </li>
-</ul>
-<a [routerLink]="['admin']">test</a>
+<nav>
+    <ul>
+        <li *ngFor="let item of navigationItems">
+            <a *ngIf="item.children?.length === 0" [routerLink]="item.link">{{ item.label }}</a>
+            <ng-container *ngIf="item.children && item.children.length > 0">
+                <a>{{ item.label }}</a>
+                <ul>
+                    <li *ngFor="let child of item.children">
+                        <a [routerLink]="child.link">{{ child.label }}</a>
+                    </li>
+                </ul>
+            </ng-container>
+        </li>
+    </ul>
+</nav>
+

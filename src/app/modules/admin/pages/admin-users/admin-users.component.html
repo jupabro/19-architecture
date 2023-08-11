@@ -1,1 +1,9 @@
-<p>admin-users works!</p>
+<div class="user-list">
+    <div class="user-card" *ngFor="let user of users">
+        <div class="user-info">
+            <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+            <p>Username: {{ user.username }}</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+    </div>
+</div>

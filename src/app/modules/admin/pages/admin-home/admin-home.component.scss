@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 15vh;
+  align-items: center;
+  height: 100vh;
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 16px;
+    color: #555;
+  }
+}

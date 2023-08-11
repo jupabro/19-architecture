@@ -5,18 +5,17 @@ import { AdminUsersComponent } from './pages/admin-users/admin-users.component';
 
 export const routes: Routes = [
   {
-    path: '', component: AdminHomeComponent,
     data: { parents: ['admin'] },
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', component: AdminHomeComponent, data: { label: 'Home'} },
-      { path: 'users', component: AdminUsersComponent, data: { label: 'Users'} },
+      { path: 'home', component: AdminHomeComponent, data: { label: 'Home' } },
+      { path: 'users', component: AdminUsersComponent, data: { label: 'Users' } },
     ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes[0].children as Routes)],
   exports: [RouterModule]
 })
 export class AdminRoutingModule { }

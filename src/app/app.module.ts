@@ -6,15 +6,19 @@ import { AppComponent } from './app.component';
 import { SharedComponentsModule } from 'src/shared-components/shared-components.module';
 import { NavigationService } from 'src/shared-components/services/navigation.service';
 import { routes } from './app-routing.module';
+import { HomeComponent } from './pages/home/home.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedComponentsModule
+    SharedComponentsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
