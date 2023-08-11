@@ -13,11 +13,13 @@ export class NavigationService {
   navigationItems$ = this.navigationItemsSubject.asObservable();
 
   addNavigationItems(routes: Route[]): void {
+    console.log("service add", routes)
     const existingNavigationItems = this.navigationItemsSubject.value
     const childRoute = routes[0]
     if (this.isChildRoute(childRoute)) {
       const labeledChildRoutes = childRoute.children.filter((child) => this.isLabeledRoute(child)) as LabeledRoute[]
-      const parentNavigationItem = existingNavigationItems.find(item => this.findNavigationItem(item, childRoute.data['parents']));
+      const parentNavigationItem = this.findNavigationItem(childRoute.data['parents'])
+      console.log("parentNavigationItem", parentNavigationItem)
       if (parentNavigationItem) {
         const updatedNavigationItems: NavigationItem[] = existingNavigationItems.map((item) => this.updateNavigationItem(item, labeledChildRoutes, parentNavigationItem))
         this.navigationItemsSubject.next(updatedNavigationItems);
@@ -43,17 +45,39 @@ export class NavigationService {
     return item;
   }
 
-  private findNavigationItem(item: NavigationItem, link: string[]): NavigationItem | null {
-    if (item.link === link) {
-      return item;
+  private linksAreIdentical = (arr1: string[], arr2: string[]) => {
+    if (arr1.length !== arr2.length) {
+      return false;
     }
-    for (const child of item.children) {
-      const result = this.findNavigationItem(child, link);
-      if (result !== null) {
-        return result;
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return false;
       }
     }
-    return null;
+    return true;
+  }
+
+  private findNavigationItem(link: string[]): NavigationItem | null {
+    console.log("find", link)
+
+    const browseItemTree = (item: NavigationItem): NavigationItem | null => {
+
+      console.log("browseItemTree", item.link)
+      if (this.linksAreIdentical(item.link, link)) {
+        console.log("found")
+        return item;
+      }
+      for (const child of item.children) {
+        const foundItem = browseItemTree(child);
+        if (foundItem) {
+          return foundItem;
+        }
+      }
+      return null;
+    }
+    const foundItem = this.navigationItemsSubject.value.map(item => browseItemTree(item))
+      .find(item => item !== null)
+    return foundItem ? foundItem : null
   }
 
   private createNavigationItems(routes: LabeledRoute[], parentItem: NavigationItem | null): NavigationItem[] {
@@ -72,18 +96,18 @@ export class NavigationService {
     return newNavigationItems;
   }
 
-  private isNavigationItem(item: any): item is NavigationItem {
-    return (
-      item &&
-      typeof item.label === 'string' &&
-      Array.isArray(item.link) &&
-      item.link.every((segment: any) => typeof segment === 'string') &&
-      Array.isArray(item.children)
-    );
-  }
+  // private isNavigationItem(item: any): item is NavigationItem {
+  //   return (
+  //     item &&
+  //     typeof item.label === 'string' &&
+  //     Array.isArray(item.link) &&
+  //     item.link.every((segment: any) => typeof segment === 'string') &&
+  //     Array.isArray(item.children)
+  //   );
+  // }
 
   private isLabeledRoute(route: Route): route is LabeledRoute {
-    return Boolean(route.data && typeof route.data['label'] === 'string');
+    return Boolean(route.data && route.path && typeof route.data['label'] === 'string');
   }
 
   private isChildRoute(route: Route): route is ChildRoute {
