@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Route } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { NavigationItem } from '../models/nav-item.interface';
-import { LabeledRoute, ChildRoute } from '../models/child.route.interface';
+import { LabeledRoute } from '../models/route.interface';
+import { isLabeledRoute, isChildRoute } from '../models/type-utils';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class NavigationService {
     console.log("service add", routes)
     const existingNavigationItems = this.navigationItemsSubject.value
     const childRoute = routes[0]
-    if (this.isChildRoute(childRoute)) {
-      const labeledChildRoutes = childRoute.children.filter((child) => this.isLabeledRoute(child)) as LabeledRoute[]
+    if (isChildRoute(childRoute)) {
+      const labeledChildRoutes = childRoute.children.filter((child) => isLabeledRoute(child)) as LabeledRoute[]
       const parentNavigationItem = this.findNavigationItem(childRoute.data['parents'])
       console.log("parentNavigationItem", parentNavigationItem)
       if (parentNavigationItem) {
@@ -25,7 +26,7 @@ export class NavigationService {
         this.navigationItemsSubject.next(updatedNavigationItems);
       }
     } else {
-      const labeledRoutes = routes.filter((route) => this.isLabeledRoute(route)) as LabeledRoute[]
+      const labeledRoutes = routes.filter((route) => isLabeledRoute(route)) as LabeledRoute[]
       const newNavigationItems = this.createNavigationItems(labeledRoutes, null)
       this.navigationItemsSubject.next([...existingNavigationItems, ...newNavigationItems]);
     }
@@ -94,28 +95,6 @@ export class NavigationService {
     });
 
     return newNavigationItems;
-  }
-
-  // private isNavigationItem(item: any): item is NavigationItem {
-  //   return (
-  //     item &&
-  //     typeof item.label === 'string' &&
-  //     Array.isArray(item.link) &&
-  //     item.link.every((segment: any) => typeof segment === 'string') &&
-  //     Array.isArray(item.children)
-  //   );
-  // }
-
-  private isLabeledRoute(route: Route): route is LabeledRoute {
-    return Boolean(route.data && route.path && typeof route.data['label'] === 'string');
-  }
-
-  private isChildRoute(route: Route): route is ChildRoute {
-    const isArrayOfStrings = (arr: unknown): boolean => {
-      return Array.isArray(arr) && arr.every((item) => typeof item === 'string');
-    }
-    return Boolean(
-      isArrayOfStrings(route.data?.['parents']) && route.children)
   }
 }
 
