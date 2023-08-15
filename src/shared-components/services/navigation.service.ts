@@ -86,9 +86,11 @@ export class NavigationService {
     const parentLink = parentItem ? parentItem.link : []
 
     routes.forEach((route) => {
+      const extractedPath = route.path.split('/:')[0]
+
       const newNavigationItem: NavigationItem = {
         label: route.data['label'],
-        link: [...parentLink, route.path],
+        link: [...parentLink, extractedPath],
         children: [],
       };
       newNavigationItems.push(newNavigationItem)

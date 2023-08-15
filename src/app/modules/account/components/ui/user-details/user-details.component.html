@@ -1,1 +1,8 @@
-<p>user-details works!</p>
+<div class="container">
+    <div *ngIf="user">
+        <h1>Welcome to your account, {{ user.firstname }} {{ user.lastname }}!</h1>
+        <h2>User Details:</h2>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
+</div>
