@@ -16,14 +16,6 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.loggedInUser$ = this.userService.user$
-    // this.route.paramMap.subscribe((params: ParamMap) => {
-    //   const userId = params.get('userId');
-    //   if (userId && userId !== 'login') {
-    //     this.userService.user$.subscribe((user) => {
-    //       this.loggedInUser = user;
-    //     });
-    //   }
-    // });
   }
 
   fetchUser(id: number) {

@@ -12,7 +12,6 @@ export const routes: Routes = [
       { path: 'home', redirectTo: 'home/login', pathMatch: 'full' },
       { path: 'home/login', canActivate: [LoginGuard], component: AccountHomeComponent },
       { path: 'home/:userId', canActivate: [UserIdGuard], component: AccountHomeComponent, data: { label: 'Home' } },
-
     ],
   },
 ];
