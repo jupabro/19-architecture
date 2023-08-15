@@ -7,5 +7,5 @@ import { User } from 'src/app/core/models/user.class';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent {
-  @Input() user: User | undefined;
+  @Input() user: User | null = null;
 }

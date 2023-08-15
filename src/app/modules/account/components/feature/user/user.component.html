@@ -1,2 +1,2 @@
-<app-user-details *ngIf="loggedInUser" [user]="loggedInUser"></app-user-details>
-<app-login-form *ngIf="!loggedInUser" (loggedInUserId)="fetchUser($event)"></app-login-form>
+<app-user-details *ngIf="loggedInUser$ | async" [user]="loggedInUser$ | async"></app-user-details>
+<app-login-form *ngIf="!(loggedInUser$ | async)" (loggedInUserId)="fetchUser($event)"></app-login-form>

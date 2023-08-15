@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountHomeComponent } from './pages/account-home/account-home.component';
 import { UserIdGuard } from './guards/user-id-guard';
+import { LoginGuard } from './guards/login-guard';
 
 export const routes: Routes = [
   {
@@ -9,9 +10,9 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home/login', pathMatch: 'full' },
       { path: 'home', redirectTo: 'home/login', pathMatch: 'full' },
-      { path: 'home/login', canActivate: [UserIdGuard], component: AccountHomeComponent },
-      { path: 'home/:userId',  component: AccountHomeComponent, data: { label: 'Home' } },
-      
+      { path: 'home/login', canActivate: [LoginGuard], component: AccountHomeComponent },
+      { path: 'home/:userId', canActivate: [UserIdGuard], component: AccountHomeComponent, data: { label: 'Home' } },
+
     ],
   },
 ];

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { User } from 'src/app/core/models/user.class';
 import { UserService } from 'src/app/core/services/user.service';
 
@@ -9,26 +10,24 @@ import { UserService } from 'src/app/core/services/user.service';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  loggedInUser: User | undefined;
+  loggedInUser$: Observable<User | null> | undefined
 
   constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      const userId = params.get('userId');
-      if (userId && userId !== 'login') {
-        const numericUserId = parseInt(userId, 10);
-        this.userService.getUser(numericUserId).subscribe((user: User) => {
-          this.loggedInUser = user;
-        });
-      }
-    });
+    this.loggedInUser$ = this.userService.user$
+    // this.route.paramMap.subscribe((params: ParamMap) => {
+    //   const userId = params.get('userId');
+    //   if (userId && userId !== 'login') {
+    //     this.userService.user$.subscribe((user) => {
+    //       this.loggedInUser = user;
+    //     });
+    //   }
+    // });
   }
 
   fetchUser(id: number) {
     console.log("fetching", id)
-
-    this.router.navigate(['/account/home', id]);
-    
+    this.userService.login(id).subscribe((boolean) => { if (boolean) { this.router.navigate(['/account/home', id]) } })
   }
 }
